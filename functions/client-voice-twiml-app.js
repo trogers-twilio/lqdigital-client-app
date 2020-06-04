@@ -11,7 +11,12 @@ exports.handler = function(context, event, callback) {
       callerId: process.env.CALLER_ID
     });
     dial[attr]({}, event.To);
-    twiml.pause({ length: 5 });
+    // This pause is necessary so the parent call (agent call) doesn't drop
+    // when the child call is updated. If there is no TwiML instruction after
+    // <Dial> and no action URL which will return TwiML, then <Pause> will
+    // at least keep the agent call active until it can be updated with new
+    // TwiML upon the consumer joining the conference 
+    twiml.pause({ length: 20 });
   } else {
     twiml.say("Thanks for calling!");
   }
