@@ -2,6 +2,12 @@
 
 This is a collection of functions that will setup a sample environment for use with the Programmable Voice SDKs. These are specifically for use with **client side** implementations. This also provides an example web application to explore the Voice Client JavaScript SDK.
 
+## Twilio CLI
+
+Deploying this app will require the Twilio CLI. Instructions for installing the CLI tools serverless plugin can be found on the Twilio Client Quickstart Guide here:
+
+https://www.twilio.com/docs/voice/client/javascript/quickstart
+
 ## Configuration
 
 ```bash
