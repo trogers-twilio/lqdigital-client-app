@@ -14,6 +14,10 @@ const handleParticipantJoin = async (client, event, callback) => {
   } = event;
 
   if (CallSid === ConsumerCallSid) {
+    // By leveraging the conference status participant-join event, we can be certain
+    // the consumer's child call leg has processed the new instruction to join the conference
+    // before updating the agent's parent call leg and potentially causing the child call
+    // to drop if we updated that call too soon. This pattern helps avoid a race condition.
     const agentTwiml = new Twilio.twiml.VoiceResponse();
     agentTwiml.dial().conference({ startConferenceOnEnter: true }, FriendlyName);
     
@@ -21,8 +25,11 @@ const handleParticipantJoin = async (client, event, callback) => {
     await client
       .calls(AgentCallSid)
       .update({ twiml: agentTwiml.toString() });
-      
+
   } else if (CallSid === AgentCallSid) {
+    // Putting the consumer on hold since the agent should only join the conference once,
+    // when the conference is first setup. This assumes all new conferences require the
+    // consumer to be on hold initially so the agent and third party can talk privately.
     console.log('Agent joined the conference. Holding consumer participant.');
     await client
       .conferences(ConferenceSid)
