@@ -19,6 +19,7 @@ exports.handler = async function(context, event, callback) {
     .participants
     .create({
       // Early media allows the other conference participants to here ring tone
+      // while they're waiting for the new participant to answer the call
       earlyMedia: true,
       from: CALLER_ID,
       to: phoneNumber
