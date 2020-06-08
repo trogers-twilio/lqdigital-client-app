@@ -40,6 +40,11 @@ exports.handler = async function(context, event, callback) {
     await client.calls(childCallSid).update({ twiml: childTwiml.toString() })
   }
 
+  // Since it takes a few moments for the TwiML to be processed and the new conference
+  // to be setup, this following code will try every second for up to 5 seconds to retrieve
+  // the conference SID associated with the unique conference Friendly Name. This conference
+  // SID is critical for the front end to have for future API calls to put add/remove and
+  // hold/unhold participants.
   const getConfSidInterval = setInterval(async () => {
     console.log(`Getting conference SID for ${conferenceName}`);
     const matchingConferences = await client.conferences.list({ friendlyName: conferenceName });

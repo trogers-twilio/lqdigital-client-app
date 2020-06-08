@@ -18,6 +18,7 @@ exports.handler = async function(context, event, callback) {
   const participant = await client.conferences(conferenceSid)
     .participants
     .create({
+      // Early media allows the other conference participants to here ring tone
       earlyMedia: true,
       from: CALLER_ID,
       to: phoneNumber
